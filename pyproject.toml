@@ -1,0 +1,20 @@
+# ---------------------------
+# pyproject.toml
+# ---------------------------
+[project]
+name = "netbox-netping"
+version = "0.3.0"
+description = "Ping prefixes & IPs directly from NetBox (updates status & custom field)"
+readme = "README.md"
+requires-python = ">=3.10"
+dependencies = [
+    "netbox>=4.0,<5.0",   # tested on 4.2.9
+    "pythonping>=1.1.4",
+]
+classifiers = [
+    "Framework :: Django",
+    "License :: OSI Approved :: Apache Software License",
+]
+
+[project.entry-points."netbox.plugins"]
+netbox_netping = "netbox_netping.config:NetPingConfig"

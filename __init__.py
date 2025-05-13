@@ -1,2 +1,7 @@
+# ---------------------------
 # netbox_netping/__init__.py
-from .config import NetPingConfig  # noqa: F401
+# ---------------------------
+"""Top‑level package for NetPing plugin."""
+__version__ = "0.3.0"
+
+default_app_config = "netbox_netping.config.NetPingConfig"
