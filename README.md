@@ -1,5 +1,4 @@
 # NetPing – NetBox plugin to ping prefixes and IP addresses
-========================================================
 
 Features
 --------
