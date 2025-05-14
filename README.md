@@ -1,4 +1,3 @@
-
 # NetPing – NetBox plugin
 
 # Features

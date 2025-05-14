@@ -1,6 +1,5 @@
-# ---------------------------
-# pyproject.toml
-# ---------------------------
+# netbox_netping/pyproject.toml
+
 [project]
 name = "netbox-netping"
 version = "0.3.0"

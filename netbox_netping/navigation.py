@@ -1,10 +1,9 @@
-# netbox_netping/navigation.py
+# netbox_netping/netbox_netping/navigation.py
 from netbox.plugins import PluginMenuItem
 
 menu_items = (
     PluginMenuItem(
-        link="plugins:netbox_netping:job",     # view gerada pelo Job
+        link="plugins:netbox_netping:pingjob",
         link_text="Ping prefixes / IPs",
-        buttons=(),
     ),
-),
+)

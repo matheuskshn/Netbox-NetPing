@@ -1,6 +1,5 @@
-# ---------------------------
-# netbox_netping/jobs.py
-# ---------------------------
+# netbox_netping/netbox_netping/jobs.py
+
 from concurrent.futures import ThreadPoolExecutor
 import re
 from ipaddress import ip_address
