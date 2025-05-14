@@ -22,13 +22,13 @@ class PingJob(Job):
         model=Prefix,
         required=False,
         label="Prefixes",
-        help_text="Deixe em branco para todos os prefixos.",
+        description="Deixe em branco para todos os prefixos.",
     )
 
     ip_list = StringVar(
         required=False,
         label="IPs extras",
-        help_text="192.0.2.1, 198.51.100.10 ... separados por espaço ou vírgula",
+        description="192.0.2.1, 198.51.100.10 ... separados por espaço ou vírgula",
     )
 
 def run(self, prefixes, ip_list, **kwargs):
