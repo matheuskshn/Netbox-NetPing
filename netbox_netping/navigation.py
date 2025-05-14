@@ -1,10 +1,17 @@
 # netbox_netping/navigation.py
-from netbox.plugins import PluginMenuItem
+from netbox.plugins import PluginMenuItem, PluginMenuButton
+from django.urls import reverse
 
 menu_items = (
     PluginMenuItem(
-        link="plugins:netbox_netping:job",   # view gerada automaticamente
+        link=reverse("plugins:netbox_netping:job"),     # view gerada pelo Job
         link_text="Ping prefixes / IPs",
-        permissions=["netbox_netping.run_pingjob"],
+        buttons=(
+            PluginMenuButton(
+                link="plugins:netbox_netping:job",
+                title="Run now",
+                icon_class="mdi mdi-play",
+            ),
+        ),
     ),
 )
