@@ -7,7 +7,7 @@ class NetPingConfig(PluginConfig):
     name         = "netbox_netping"
     verbose_name = "NetPing – Prefix/IP Ping"
     description  = "Ping prefixes and IPs, updating status and custom field."
-    version      = "0.3.1"
+    version      = "0.3.2"
 
     # --- Créditos -----------------------------------------------------------
     author        = "Matheus Gomes"
@@ -27,7 +27,12 @@ class NetPingConfig(PluginConfig):
         "PING_WORKERS": 32,
         "STATUS_UP":    "active",
         "STATUS_DOWN":  "deprecated",
+        
+    
     }
+    queues = ["default"]
+    # --- Configurações de interface ----------------------------------------
+    urlpatterns = "netbox_netping.urls"
 
 # NetBox busca uma variável - nível de módulo - chamada “config”
 config = NetPingConfig
