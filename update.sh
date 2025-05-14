@@ -1,10 +1,8 @@
 #!/bin/bash
 set -e
-PLUGIN_DIR="/opt/netbox/netbox/local/netbox_netping"
 VENV="/opt/netbox/venv"
 MANAGE="/opt/netbox/netbox/manage.py"
 
-cd "$PLUGIN_DIR"
 git pull
 
 source "$VENV/bin/activate"
