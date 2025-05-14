@@ -1,5 +1,6 @@
 # netbox_netping/netbox_netping/jobs.py
 
+from __future__ import annotations
 from concurrent.futures import ThreadPoolExecutor
 import re
 from ipaddress import ip_address
@@ -8,15 +9,13 @@ from typing import Dict, List, Tuple, Optional
 from pythonping import ping
 from ipam.models import Prefix, IPAddress
 from extras.models import CustomField
-from netbox.jobs import Job
+from netbox.jobs import JobRunner
 from netbox.plugins import get_plugin_config
 from extras.scripts import MultiObjectVar, StringVar
 
-class PingJob(Job):
+class PingJob(JobRunner):
     class Meta:
         name = "Ping prefixes / IPs"
-        description = "Ping every IP in selected prefixes or manual list, update status and custom field."
-        commit_default = False  # user must tick to write changes
 
     prefixes = MultiObjectVar(
         model=Prefix,
@@ -30,8 +29,10 @@ class PingJob(Job):
         label="IPs extras",
         description="192.0.2.1, 198.51.100.10 ... separados por espaço ou vírgula",
     )
+    class Meta:                # ← agora só “name” (outros foram removidos)
+        name = "Ping prefixes / IPs"
 
-def run(self, prefixes, ip_list, **kwargs):
+    def run(self, prefixes, ip_list, **kwargs):
         # ------------------------------------------------------------------ #
         # Configurações do plugin
         # ------------------------------------------------------------------ #
