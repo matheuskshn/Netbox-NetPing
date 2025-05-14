@@ -7,8 +7,8 @@ from typing import Dict, List, Tuple, Optional
 
 from pythonping import ping
 from ipam.models import Prefix, IPAddress
-from extras.models import CustomField, CustomFieldChoice
-from netbox.jobs import Job          # <- era extras.jobs.Job
+from extras.models import CustomField
+from netbox.jobs import Job
 from netbox.plugins import get_plugin_config
 from utilities.forms import MultiObjectVar, StringVar
 
@@ -31,27 +31,32 @@ class PingJob(Job):
         help_text="192.0.2.1, 198.51.100.10 ... separados por espaço ou vírgula",
     )
 
-    def run(self, prefixes, ip_list, **kwargs):
-        cfg = get_plugin_config("netbox_netping") or {}
-        count = cfg.get("PING_COUNT", 1)
-        timeout = cfg.get("PING_TIMEOUT", 1)
-        workers = cfg.get("PING_WORKERS", 32)
-        status_up = cfg.get("STATUS_UP", "active")
-        status_down = cfg.get("STATUS_DOWN", "deprecated")
+def run(self, prefixes, ip_list, **kwargs):
+        # ------------------------------------------------------------------ #
+        # Configurações do plugin
+        # ------------------------------------------------------------------ #
+        cfg          = get_plugin_config("netbox_netping") or {}
+        count        = cfg.get("PING_COUNT",   1)
+        timeout      = cfg.get("PING_TIMEOUT", 1)
+        workers      = cfg.get("PING_WORKERS", 32)
+        status_up    = cfg.get("STATUS_UP",    "active")
+        status_down  = cfg.get("STATUS_DOWN",  "deprecated")
 
-        # custom field lookup
+        # ------------------------------------------------------------------ #
+        # Campo personalizado (SELECT) usado para registrar o resultado
+        # ------------------------------------------------------------------ #
         cf_ping: Optional[CustomField] = CustomField.objects.filter(name="ping_status").first()
-        cf_choice_up = cf_choice_down = None
-        if cf_ping:
-            cf_choice_up = CustomFieldChoice.objects.filter(custom_field=cf_ping, value="status_up").first()
-            cf_choice_down = CustomFieldChoice.objects.filter(custom_field=cf_ping, value="status_down").first()
 
-        # gather addresses
+        # ------------------------------------------------------------------ #
+        # Construção da lista de endereços a pingar
+        # ------------------------------------------------------------------ #
         addr_map: Dict[str, Optional[IPAddress]] = {}
         sel_prefixes = prefixes if prefixes else Prefix.objects.all()
+
         for pfx in sel_prefixes:
             for ip_obj in IPAddress.objects.filter(parent=pfx):
                 addr_map[str(ip_obj.address.ip)] = ip_obj
+
         if ip_list:
             for token in re.split(r"[\s,]+", ip_list.strip()):
                 if not token:
@@ -59,7 +64,7 @@ class PingJob(Job):
                 try:
                     addr_map.setdefault(str(ip_address(token)), None)
                 except ValueError:
-                    self.log_warning(f"'{token}' inválido, ignorado")
+                    self.log_warning(f"‘{token}’ inválido, ignorado")
 
         if not addr_map:
             self.log_failure("Nenhum IP encontrado para pingar")
@@ -67,6 +72,9 @@ class PingJob(Job):
 
         addrs = list(addr_map.keys())
 
+        # ------------------------------------------------------------------ #
+        # Função de ping (executada em paralelo)
+        # ------------------------------------------------------------------ #
         def _probe(addr: str) -> Tuple[str, bool, float]:
             try:
                 r = ping(addr, count=count, timeout=timeout, size=40)
@@ -74,14 +82,22 @@ class PingJob(Job):
             except Exception:
                 return addr, False, 0.0
 
+        # ------------------------------------------------------------------ #
+        # Execução em pool de threads
+        # ------------------------------------------------------------------ #
         up = down = 0
         results: List[Tuple[str, bool, float]] = []
         with ThreadPoolExecutor(max_workers=workers) as pool:
             for res in pool.map(_probe, addrs):
                 results.append(res)
 
+        # ------------------------------------------------------------------ #
+        # Tratamento dos resultados
+        # ------------------------------------------------------------------ #
         for addr, ok, latency in results:
             ip_obj = addr_map[addr]
+
+            # Log de cada host
             if ok:
                 up += 1
                 self.log_success(f"{addr} UP – {latency:.2f} ms")
@@ -89,15 +105,20 @@ class PingJob(Job):
                 down += 1
                 self.log_warning(f"{addr} DOWN")
 
+            # Persistência se o usuário marcou “commit”
             if self.commit and ip_obj:
                 ip_obj.status = status_up if ok else status_down
-                if cf_ping and cf_choice_up and cf_choice_down:
+
+                # Atualiza o campo personalizado (string do choice)
+                if cf_ping:
                     ip_obj.custom_field_data["ping_status"] = (
-                        cf_choice_up.pk if ok else cf_choice_down.pk
+                        "status_up" if ok else "status_down"
                     )
                 ip_obj.save()
 
-        self.log_info(f"Concluído: {up} UP, {down} DOWN, {len(addrs)} testados, workers={workers}")
+        self.log_info(
+            f"Concluído: {up} UP, {down} DOWN, {len(addrs)} testados, workers={workers}"
+        )
 
 
 jobs = [PingJob]
