@@ -8,9 +8,8 @@ from typing import Dict, List, Tuple, Optional
 from pythonping import ping
 from ipam.models import Prefix, IPAddress
 from extras.models import CustomField
-from netbox.jobs import Job
+from netbox.jobs import Job, MultiObjectVar, StringVar
 from netbox.plugins import get_plugin_config
-from utilities.forms import MultiObjectVar, StringVar
 
 class PingJob(Job):
     class Meta:
