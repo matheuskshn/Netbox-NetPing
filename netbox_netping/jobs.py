@@ -10,7 +10,7 @@ from ipam.models import Prefix, IPAddress
 from extras.models import CustomField
 from netbox.jobs import Job
 from netbox.plugins import get_plugin_config
-from netbox.forms import MultiObjectVar, StringVar
+from netbox.jobs.variables import MultiObjectVar, StringVar
 
 class PingJob(Job):
     class Meta:
