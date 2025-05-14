@@ -2,7 +2,7 @@
 
 [project]
 name = "netbox-netping"
-version = "0.3.2"
+version = "0.0.1"
 description = "Ping prefixes & IPs directly from NetBox (updates status & custom field)"
 readme = "README.md"
 requires-python = ">=3.10"
