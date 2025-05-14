@@ -1,14 +1,14 @@
-# ---------------------------
-# README.md (excerpt)
-# ---------------------------
+
 # NetPing – NetBox plugin
+
 # Features
+
 * Ping every IP assigned to selected prefixes – or all prefixes – using NetBox ORM (no REST).
 * Ping arbitrary list of IPs (comma/space‑separated).
 * Parallel workers (configurable) via ThreadPool; ICMP using **pythonping**.
 * Writes results back to each `IPAddress`:
-    * `status` (configurable mapping: STATUS_UP / STATUS_DOWN)
-    * custom field `ping_status` (choices values `status_up` / `status_down`)
+  * `status` (configurable mapping: STATUS_UP / STATUS_DOWN)
+  * custom field `ping_status` (choices values `status_up` / `status_down`)
 * Exposed as a **Job** under *Tools → Jobs*.
 
 # Installation
