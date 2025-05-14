@@ -3,7 +3,7 @@
 from django.urls import path
 from .views import PingJobView
 
-app_name = "netping"
+app_name = "netbox_netping"
 
 urlpatterns = (
     path("ping/", PingJobView.as_view(), name="ping"),

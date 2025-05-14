@@ -1,7 +1,6 @@
 # netbox_netping/netbox_netping/config.py
 
 from netbox.plugins import PluginConfig
-from .urls import urlpatterns as netping_urls
 
 class NetPingConfig(PluginConfig):
     # --- Identificação ------------------------------------------------------
@@ -32,8 +31,6 @@ class NetPingConfig(PluginConfig):
     
     }
     queues = ["default"]
-    # --- Configurações de interface ----------------------------------------
-    urlpatterns  = netping_urls 
 
 # NetBox busca uma variável - nível de módulo - chamada “config”
 config = NetPingConfig
