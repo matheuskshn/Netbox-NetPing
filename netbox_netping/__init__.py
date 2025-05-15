@@ -1,2 +1,5 @@
 # netbox_netping/netbox_netping/__init__.py
-# (arquivo opcional – pode ficar vazio ou conter metadados)
+"""
+Sub-pacote onde ficam os arquivos reais do plugin.
+Pode ficar vazio.
+"""

@@ -1,5 +1,14 @@
 # netbox_netping/__init__.py
-from .netbox_netping.config import NetPingConfig
+"""
+Pacote raiz carregado pelo NetBox.  
+Precisa expor `config = <PluginConfig>` para que o NetBox o aceite.
+"""
+from importlib import import_module
 
-# Exporta o objeto `config` que o NetBox procura
+# Importa a classe NetPingConfig que está no sub-pacote real
+NetPingConfig = import_module(
+    "netbox_netping.netbox_netping.config"
+).NetPingConfig
+
+# Variável que o NetBox procura
 config = NetPingConfig
