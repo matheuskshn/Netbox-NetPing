@@ -1,5 +1,6 @@
 # netbox_netping/navigation.py
 from netbox.plugins import PluginMenuItem, PluginMenuButton
+from django.urls import reverse
 
 menu_items = (
     PluginMenuItem(
