@@ -1,8 +1,18 @@
-# netbox_netping/netbox_netping/__init__.py
-"""Top-level package for NetPing plugin."""
-__version__ = "0.1.0"
+# netbox_netping/__init__.py
+"""NetPing – plugin mínimo para NetBox 4.3."""
 
-from .config import NetPingConfig  # noqa
+from netbox.plugins import PluginConfig
 
-# NetBox espera uma variável de módulo chamada **config**
+# --------------------------------------------------------------------
+# PluginConfig
+# --------------------------------------------------------------------
+class NetPingConfig(PluginConfig):
+    name = "netbox_netping"          # import path (obrigatório)
+    verbose_name = "NetPing"         # aparece no cabeçalho
+    description = "Plugin mínimo que adiciona um item de menu."
+    version = "0.1.0"
+    base_url = "netping"             # /plugins/netping/
+    min_version = "4.3"
+
+# NetBox exige a variável de módulo **config**
 config = NetPingConfig
