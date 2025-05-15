@@ -20,7 +20,6 @@ classifiers = [
   "Programming Language :: Python :: 3.11",
   "Programming Language :: Python :: 3.12",
 ]
-dependencies = ["netbox>=4.3,<4.4"]
 
 [tool.setuptools]
 packages = ["netbox_netping"]
