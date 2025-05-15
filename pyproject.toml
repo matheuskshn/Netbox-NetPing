@@ -23,5 +23,4 @@ classifiers = [
 dependencies = ["netbox>=4.3,<4.4"]
 
 [tool.setuptools]
-package-dir = { "" = "netbox_netping" }   # aponta para o subdiretório-pacote
-packages = ["netbox_netping"]             # inclui somente o plugin
+packages = ["netbox_netping"]
